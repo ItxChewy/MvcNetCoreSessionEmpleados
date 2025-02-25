@@ -1,0 +1,34 @@
+﻿@model List<Empleado>
+
+@{
+	List<int> ids = Context.Session.GetObject<List<int>>("IDSEMPLEADOSV5");
+}
+
+<h1>Session Empleados OK</h1>
+<p>
+	<a asp-controller="Empleados" asp-action="EmpleadosAlmacenadosV5">
+		Empleados Almacenados V5
+	</a>
+</p>
+<h4>@ViewData["MENSAJE"]</h4>
+<ul class="list-group">
+	@foreach (Empleado empleado in Model)
+	{
+		<li class="list-group-item list-group-item-success">
+			@empleado.Apellido
+			@if (ids != null && ids.Contains(empleado.IdEmpleado))
+			{
+				<img src="~/images/vini.jpg" style="width:50px;height:50px" />
+			}
+			else
+			{
+				<a asp-controller="Empleados"
+				   asp-action="SessionEmpleadosV5"
+				   asp-route-idempleado="@empleado.IdEmpleado">
+					Almacenar Empleado
+				</a>
+			}
+
+		</li>
+	}
+</ul>
