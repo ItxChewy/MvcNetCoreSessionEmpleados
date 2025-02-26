@@ -1,0 +1,59 @@
+﻿@{
+	List<Empleado> favoritos = memoryChache.Get<List<Empleado>>("FAVORITOS");
+}
+@{
+	ViewData["Title"] = "Empleados FAVORITOS";
+}
+
+<h1>Empleados Favoritos</h1>
+
+
+
+@if (favoritos == null)
+{
+	<h2 style="color:red">
+		No existen Empleados favoritos
+	</h2>
+}
+else
+{
+	<table class="table table-bordered table-striped table-warning">
+		<thead>
+			<tr>
+				<th>
+					Apellido
+				</th>
+				<th>
+					Oficio
+				</th>
+				<th>
+					Salario
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (Empleado item in favoritos)
+			{
+				<tr>
+					<td>
+						@item.Apellido
+					</td>
+					<td>
+						@item.Oficio
+					</td>
+					<td>
+						@item.Salario
+					</td>
+					<td>
+						<a asp-action="EmpleadosFavoritos" asp-controller="Empleados"
+						   asp-route-ideliminar="@item.IdEmpleado"
+						   class="btn btn-danger">
+							Eliminar Favorito
+						</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

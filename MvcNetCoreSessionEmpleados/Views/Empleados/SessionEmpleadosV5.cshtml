@@ -2,20 +2,52 @@
 
 @{
 	List<int> ids = Context.Session.GetObject<List<int>>("IDSEMPLEADOSV5");
+	//List<Empleado> favoritos = Context.RequestServices.GetService<IMemoryCache>().Get<List<Empleado>>("FAVORITOS");
+	List<Empleado> favoritos = this.memoryChache.Get<List<Empleado>>("FAVORITOS");
 }
 
 <h1>Session Empleados OK</h1>
+
+@if (ids != null)
+{
+	<h3 style="color:chartreuse">Empleados Session: @ids.Count</h3>
+}
+@if (favoritos != null)
+{
+	<h3 style="color:crimson">Empleados Favoritos: @favoritos.Count</h3>
+}
 <p>
 	<a asp-controller="Empleados" asp-action="EmpleadosAlmacenadosV5">
 		Empleados Almacenados V5
 	</a>
 </p>
-<h4>@ViewData["MENSAJE"]</h4>
+@* <h4>@ViewData["MENSAJE"]</h4> *@
 <ul class="list-group">
 	@foreach (Empleado empleado in Model)
 	{
+
 		<li class="list-group-item list-group-item-success">
 			@empleado.Apellido
+			@if (favoritos != null && favoritos.Any(i => i.IdEmpleado == empleado.IdEmpleado))
+			{
+				<a asp-controller="Empleados" asp-action="SessionEmpleadosV5"
+				   asp-route-ideliminar="@empleado.IdEmpleado"
+				   class="btn btn-sm btn-danger">
+					Eliminar Favorito
+				</a>
+			}
+			else
+			{
+				<a asp-controller="Empleados" asp-action="SessionEmpleadosV5"
+				   asp-route-idfavorito="@empleado.IdEmpleado"
+				   class="btn btn-sm btn-primary">
+					Añadir Favorito
+				</a>
+			}
+
+
+
+
 			@if (ids != null && ids.Contains(empleado.IdEmpleado))
 			{
 				<img src="~/images/vini.jpg" style="width:50px;height:50px" />
@@ -24,7 +56,8 @@
 			{
 				<a asp-controller="Empleados"
 				   asp-action="SessionEmpleadosV5"
-				   asp-route-idempleado="@empleado.IdEmpleado">
+				   asp-route-idempleado="@empleado.IdEmpleado"
+				   class="btn btn-secondary">
 					Almacenar Empleado
 				</a>
 			}
